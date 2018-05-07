@@ -1,10 +1,10 @@
-package parse
+package parser
 
 import (
-	"github.com/georgefzc/crawler/simple/engine"
 	"regexp"
 )
 
+//It is for precompile
 var (
 	nameRe   = regexp.MustCompile(`<h1 class="ceiling-name ib fl fs24 lh32 blue">([^<]+)</h1> `)
 	ageRe    = regexp.MustCompile(`<td><span class="label">年龄：</span>([^<]+)</td>`)
@@ -17,6 +17,7 @@ var (
 )
 var guessRe = regexp.MustCompile(`<a class="exp-user-name"[^>]*href="(http://album.zhenai.com/u/[\d]+)">([^<]+)</a>`)
 
+//Person implements the Parse interface
 type Person struct {
 	Name   string
 	Age    string
@@ -29,7 +30,7 @@ type Person struct {
 }
 
 //Parse CityList html contents
-func (p *Person) Parse(contents []byte) *engine.ParseResult {
+func (p *Person) Parse(contents []byte) *Result {
 	person := Person{
 		Name:   extractString(contents, nameRe),
 		Age:    extractString(contents, ageRe),
@@ -41,15 +42,15 @@ func (p *Person) Parse(contents []byte) *engine.ParseResult {
 		Car:    extractString(contents, carRe),
 	}
 
-	res := engine.ParseResult{}
+	res := Result{}
 	guessMatches := guessRe.FindAllSubmatch(contents, -1)
 	for _, m := range guessMatches {
-		res.Requests = append(res.Requests, engine.Request{
+		res.Requests = append(res.Requests, Request{
 			Url:    string(m[1]),
 			Parser: &Person{},
 		})
 	}
-	res.Items = append(res.Items, engine.Item{
+	res.Items = append(res.Items, Item{
 		Payload: person,
 	})
 

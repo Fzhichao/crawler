@@ -2,16 +2,24 @@ package main
 
 import (
 	"github.com/georgefzc/crawler/simple/engine"
-	"github.com/georgefzc/crawler/simple/zhenai/parse"
+	"github.com/georgefzc/crawler/simple/zhenai/parser"
 )
 
 const cityListURL = "http://www.zhenai.com/zhenghun"
 
-//This is a simple single thread main
+//Start Engine.
 func main() {
-	e := engine.SerialEngine{}
-	e.Run(engine.Request{
+
+	//e := engine.SerialEngine{}
+	//e.Run(parser.Request{
+	//	Url:    cityListURL,
+	//	Parser: &parser.CityList{},
+	//})
+
+	e := engine.ConcurrentEngine{}
+	e.Run(parser.Request{
 		Url:    cityListURL,
-		Parser: &parse.CityList{},
+		Parser: &parser.CityList{},
 	})
+
 }

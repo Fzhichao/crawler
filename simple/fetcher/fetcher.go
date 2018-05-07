@@ -3,19 +3,20 @@ package fetcher
 import (
 	"bufio"
 	"log"
-	"golang.org/x/net/html/charset"
-	"golang.org/x/text/encoding"
+	"time"
 	"net/http"
-	"golang.org/x/text/transform"
 	"io/ioutil"
 	"golang.org/x/text/encoding/unicode"
+	"golang.org/x/net/html/charset"
+	"golang.org/x/text/encoding"
+	"golang.org/x/text/transform"
 )
 
-//var rateLimiter = time.Tick(time.Second)
+var rateLimiter = time.Tick(time.Second / 20)
 
 // Get URL and return UTF8 contents
 func Fetch(url string) ([]byte, error) {
-	//<-rateLimiter
+	<-rateLimiter
 	resp, err := http.Get(url)
 	if err != nil {
 		return nil, err

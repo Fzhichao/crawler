@@ -1,4 +1,4 @@
-package engine
+package parser
 
 type Request struct {
 	Url    string
@@ -9,11 +9,13 @@ type Item struct {
 	Payload interface{}
 }
 
-type ParseResult struct {
+type Result struct {
 	Requests []Request
 	Items    []Item
 }
 
 type Parser interface {
-	Parse(contents []byte) *ParseResult
+	Parse(contents []byte) *Result
 }
+
+
