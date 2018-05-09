@@ -6,6 +6,8 @@ type Request struct {
 }
 
 type Item struct {
+	Url     string
+	Id      string
 	Payload interface{}
 }
 
@@ -15,7 +17,5 @@ type Result struct {
 }
 
 type Parser interface {
-	Parse(contents []byte) *Result
+	Parse([]byte, string) (*Result, error)
 }
-
-

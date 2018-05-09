@@ -3,6 +3,7 @@ package parser
 import (
 	"regexp"
 )
+
 //It is for precompile
 var cityListRe = regexp.MustCompile(`<a href="(http://www.zhenai.com/zhenghun/[a-z0-9]+)"[^>]*>([^<]+)</a>`)
 
@@ -10,23 +11,24 @@ var cityListRe = regexp.MustCompile(`<a href="(http://www.zhenai.com/zhenghun/[a
 type CityList struct{}
 
 //Parse CityList html contents
-func (cl *CityList) Parse(contents []byte) *Result {
+func (cl *CityList) Parse(contents []byte, _ string) (*Result, error) {
 	matches := cityListRe.FindAllSubmatch(contents, -1)
 	res := &Result{}
-	count := 0
+	limit := 0	//just temp
 	for _, m := range matches {
-		count ++
-		if count > 5 {
+		if limit++; limit > 10 {
 			break
 		}
 		res.Requests = append(res.Requests, Request{
 			Url:    string(m[1]),
 			Parser: &City{},
 		})
-		res.Items = append(res.Items, Item{
-			Payload: m[2],
-		})
+		//I don`t need city item ,if needed item can be seeded
+		//log.Printf("%s",m[2])
+		//res.Items = append(res.Items, Item{
+		//	Payload: m[2],
+		//})
 	}
-	return res
 
+	return res, nil
 }

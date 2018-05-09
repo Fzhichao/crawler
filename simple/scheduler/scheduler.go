@@ -14,8 +14,7 @@ type Scheduler struct {
 }
 
 //Scheduler maintain requests and workers queue.
-//Receive requests from Engine,queued.
-//Receive free workers from worker,queued.
+//Receive requests from Engine or free workers from worker, Respective queued.
 //Both there are,send request to worker.
 func (s *Scheduler) Run() {
 	s.RequestChan = make(chan parser.Request)
