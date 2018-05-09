@@ -3,13 +3,15 @@ package persist
 import (
 	"github.com/georgefzc/crawler/simple/zhenai/parser"
 	"gopkg.in/olivere/elastic.v5"
+	"github.com/georgefzc/crawler/config"
 	"context"
 	"log"
 	"errors"
 )
 
-func ItemSaver(index string, typ string) (chan parser.Item, error) {
-	client, err := elastic.NewClient(elastic.SetURL(userUrl), elastic.SetSniff(false))
+func ItemSaver(index, typ string) (chan parser.Item, error) {
+	//TODO: Start elasticSearch
+	client, err := elastic.NewClient(elastic.SetURL(config.ElasticWinUrl), elastic.SetSniff(false))
 	if err != nil {
 		return nil, err
 	}
@@ -20,7 +22,7 @@ func ItemSaver(index string, typ string) (chan parser.Item, error) {
 			item := <-out
 			count++
 			log.Printf("ItemSaver: Got item%d: %s", count, item)
-			if err := save(client, index, typ, item); err != nil {
+			if err := Save(client, index, typ, item); err != nil {
 				log.Printf("ItemSaverErr: save item %v: %v", item, err)
 			}
 		}
@@ -28,9 +30,7 @@ func ItemSaver(index string, typ string) (chan parser.Item, error) {
 	return out, nil
 }
 
-const userUrl = "http://192.168.99.100:9200"
-
-func save(client *elastic.Client, index string, typ string, item parser.Item) error {
+func Save(client *elastic.Client, index, typ string, item parser.Item) error {
 	if index == "" || typ == "" {
 		return errors.New("must appoint index and typ")
 	}

@@ -1,17 +1,15 @@
 package main
 
 import (
-	"github.com/georgefzc/crawler/simple/engine"
-	"github.com/georgefzc/crawler/simple/persist"
-	"github.com/georgefzc/crawler/simple/zhenai/parser"
-	"github.com/georgefzc/crawler/config"
 	"log"
+	"github.com/georgefzc/crawler/config"
+	"github.com/georgefzc/crawler/simple/engine"
+	"github.com/georgefzc/crawler/simple/zhenai/parser"
+	"github.com/georgefzc/crawler/distributed/persist/client"
 )
 
-//Start Engine.
 func main() {
-
-	itemChan, err := persist.ItemSaver("data", "zhenai")
+	itemChan, err := client.ItemSaver(config.ItemSaverRpcHost)
 	if err != nil {
 		log.Printf("ItemSaver start error: %v", err)
 		return
@@ -24,5 +22,4 @@ func main() {
 		Url:    config.SeedCityListURL,
 		Parser: &parser.CityList{},
 	})
-
 }

@@ -13,7 +13,7 @@ import (
 	"fmt"
 )
 
-//For server Anti-Spider prevent limit IP.
+//Server Anti-Spider may limit IP.
 var rateLimiter = time.Tick(time.Second / 20)
 
 // Get URL and return UTF8 contents
