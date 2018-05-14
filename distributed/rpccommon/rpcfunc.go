@@ -1,4 +1,4 @@
-package rpcutils
+package rpccommon
 
 import (
 	"net"
@@ -7,11 +7,12 @@ import (
 	"log"
 )
 
-func ServerRPC(addr string, rcvr interface{}) {
+//Start JsonRPC server
+func ServerRPC(addr string, rcvr interface{}) error {
 	rpc.Register(rcvr)
 	listener, err := net.Listen("tcp", addr)
 	if err != nil {
-		panic(err)
+		return err
 	}
 	log.Printf("ServerRPC started")
 	for {
@@ -23,6 +24,7 @@ func ServerRPC(addr string, rcvr interface{}) {
 		go jsonrpc.ServeConn(conn)
 	}
 }
+//New JsonRPC client
 func NewClient(addr string) (*rpc.Client, error) {
 	conn, err := net.Dial("tcp", addr)
 	if err != nil {

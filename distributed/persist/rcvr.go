@@ -7,6 +7,7 @@ import (
 	"log"
 )
 
+//JsonRPC service.method
 type ItemSaverService struct {
 	Client     *elastic.Client
 	Index, Typ string

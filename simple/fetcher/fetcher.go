@@ -19,6 +19,7 @@ var rateLimiter = time.Tick(time.Second / 20)
 // Get URL and return UTF8 contents
 func Fetch(url string) ([]byte, error) {
 	<-rateLimiter
+	log.Printf("Fetching Url %s", url)
 	resp, err := http.Get(url)
 	if err != nil {
 		return nil, err

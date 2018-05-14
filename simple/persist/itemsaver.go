@@ -8,7 +8,7 @@ import (
 	"log"
 	"errors"
 )
-
+//Save person data to elasticSearch.
 func ItemSaver(index, typ string) (chan parser.Item, error) {
 	//TODO: Start elasticSearch
 	client, err := elastic.NewClient(elastic.SetURL(config.ElasticWinUrl), elastic.SetSniff(false))
@@ -19,6 +19,7 @@ func ItemSaver(index, typ string) (chan parser.Item, error) {
 	go func() {
 		count := 0
 		for {
+			//out from engine send
 			item := <-out
 			count++
 			log.Printf("ItemSaver: Got item%d: %s", count, item)

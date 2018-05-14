@@ -2,25 +2,23 @@ package client
 
 import (
 	"github.com/georgefzc/crawler/simple/zhenai/parser"
-	"github.com/georgefzc/crawler/distributed/rpcutils"
+	"github.com/georgefzc/crawler/distributed/rpccommon"
 	"log"
+	"github.com/georgefzc/crawler/config"
 )
 
 func ItemSaver(host string) (chan parser.Item, error) {
-	client, err := rpcutils.NewClient(host)
+	client, err := rpccommon.NewClient(host)
 	if err != nil {
 		return nil, err
 	}
-
+	log.Println("Connect to ItemSaver RPCServer")
 	out := make(chan parser.Item)
 	go func() {
-		count := 0
 		for {
 			item := <-out
-			log.Printf("ItemSaver: Got item%d: %s", count, item)
-			count++
 			rpcRes := false
-			if err := client.Call("ItemSaverService.Save", item, &rpcRes); err != nil {
+			if err := client.Call(config.ItemSaverServiceRpc, item, &rpcRes); err != nil {
 				log.Printf("ItemSaverErr: save item %v: %v", item, err)
 			}
 		}

@@ -7,9 +7,10 @@ import (
 )
 
 type ConcurrentEngine struct {
-	Scheduler scheduler.Scheduler
-	ItemChan  chan parser.Item
-	WorkerNum int
+	Scheduler   scheduler.Scheduler
+	ItemChan    chan parser.Item
+	WorkerNum   int
+	WorkProcess worker.WorkProcess
 }
 
 // Engine start scheduler and worker.
@@ -27,7 +28,7 @@ func (e *ConcurrentEngine) Run(seeds ...parser.Request) {
 	workRes := make(chan *parser.Result)
 	for i := 0; i < e.WorkerNum; i++ {
 		//Every worker will has a self chan.
-		worker.Run(worker.NewWorker(), workRes, &e.Scheduler)
+		worker.Run(worker.NewWorker(), workRes, &e.Scheduler, e.WorkProcess)
 	}
 
 	for {
