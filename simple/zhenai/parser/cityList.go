@@ -23,7 +23,7 @@ func (cl *CityList) Parse(contents []byte, _ string) (*Result, error) {
 			Url:    string(m[1]),
 			Parser: &City{},
 		})
-		//I don`t need city item ,if needed item can be seeded
+		//I don`t need city item ,if needed item can be sended
 		//log.Printf("%s",m[2])
 		//res.Items = append(res.Items, Item{
 		//	Payload: m[2],
